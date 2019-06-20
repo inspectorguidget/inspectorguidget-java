@@ -1,10 +1,4 @@
-*.class
 .idea/
-*.iml
 target/
-
-# Package Files #
-*.war
-*.ear
-
-hs_err_pid*
+*.iml
+*.log
