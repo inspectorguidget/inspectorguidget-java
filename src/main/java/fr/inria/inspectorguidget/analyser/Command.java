@@ -16,17 +16,12 @@ import spoon.reflect.code.CtCodeElement;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtExecutable;
 import spoon.reflect.declaration.CtMethod;
-import spoon.reflect.declaration.CtType;
 
 public class Command {
-	private final @NotNull CtExecutable<?> executable;
-
-	private @Nullable CtType<?> parentType;
-
 	protected static final @NotNull CommandStatmtEntry EMPTY_CMD_ENTRY = new CommandStatmtEntry(false);
 
+	private final @NotNull CtExecutable<?> executable;
 	private final @NotNull List<CommandStatmtEntry> statements;
-
 	private final @NotNull List<CommandConditionEntry> conditions;
 
 	public Command(final @NotNull CommandStatmtEntry stat, final @NotNull List<CommandConditionEntry> conds, final @NotNull CtExecutable<?> exec) {
@@ -42,10 +37,13 @@ public class Command {
 	 * Analyses the conditions to identify the code statements that the conditions depend on (e.g. local var def).
 	 */
 	private void inferConditionsDependencies() {
-		// Workaround since the Eclipse compiler of intellij cannot compile if a unique statement is written.
-		final Stream<Stream<CommandStatmtEntry>> streamStream = conditions.stream().map(cond -> cond.getAllLocalVariables().stream().
-			map(localVar -> new CommandStatmtEntry(false, Collections.singletonList((CtCodeElement) localVar))));
-		final List<CommandStatmtEntry> collect = streamStream.flatMap(s -> s).collect(Collectors.toList());
+		final List<CommandStatmtEntry> collect = conditions
+			.stream()
+			.map(cond -> cond.getAllLocalVariables()
+				.stream()
+				.map(localVar -> new CommandStatmtEntry(false, Collections.singletonList((CtCodeElement) localVar))))
+			.flatMap(s -> s)
+			.collect(Collectors.toList());
 
 		addAllStatements(collect);
 	}
@@ -55,13 +53,21 @@ public class Command {
 	}
 
 	public int getLineStart() {
-		return getMainStatmtEntry().orElse(EMPTY_CMD_ENTRY).
-			getStatmts().stream().map(s -> s.getPosition()).filter(p -> p != null).mapToInt(p -> p.getLine()).min().orElse(-1);
+		return getMainStatmtEntry().orElse(EMPTY_CMD_ENTRY).getStatmts().stream()
+			.map(s -> s.getPosition())
+			.filter(p -> p != null)
+			.mapToInt(p -> p.getLine())
+			.min()
+			.orElse(-1);
 	}
 
 	public int getLineEnd() {
-		return getMainStatmtEntry().orElse(EMPTY_CMD_ENTRY).
-			getStatmts().stream().map(s -> s.getPosition()).filter(p -> p != null).mapToInt(p -> p.getEndLine()).max().orElse(-1);
+		return getMainStatmtEntry().orElse(EMPTY_CMD_ENTRY).getStatmts().stream()
+			.map(s -> s.getPosition())
+			.filter(p -> p != null)
+			.mapToInt(p -> p.getEndLine())
+			.max()
+			.orElse(-1);
 	}
 
 	public @NotNull List<CommandConditionEntry> getConditions() {
