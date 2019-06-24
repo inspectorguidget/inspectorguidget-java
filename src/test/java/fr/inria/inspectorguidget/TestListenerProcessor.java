@@ -1,8 +1,8 @@
 package fr.inria.inspectorguidget;
 
-import fr.inria.inspectorguidget.processor.ClassListenerProcessor;
-import fr.inria.inspectorguidget.processor.InspectorGuidgetProcessor;
-import fr.inria.inspectorguidget.processor.LambdaListenerProcessor;
+import fr.inria.inspectorguidget.api.processor.ClassListenerProcessor;
+import fr.inria.inspectorguidget.api.processor.InspectorGuidgetProcessor;
+import fr.inria.inspectorguidget.api.processor.LambdaListenerProcessor;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;

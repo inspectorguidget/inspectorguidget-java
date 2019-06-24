@@ -1,7 +1,7 @@
 package fr.inria.inspectorguidget;
 
-import fr.inria.inspectorguidget.processor.ActionProcessor;
-import fr.inria.inspectorguidget.processor.InspectorGuidgetProcessor;
+import fr.inria.inspectorguidget.api.processor.ActionProcessor;
+import fr.inria.inspectorguidget.api.processor.InspectorGuidgetProcessor;
 import org.junit.Test;
 import spoon.reflect.declaration.CtElement;
 

@@ -1,7 +1,7 @@
 package fr.inria.inspectorguidget;
 
-import fr.inria.inspectorguidget.processor.InspectorGuidgetProcessor;
-import fr.inria.inspectorguidget.processor.WidgetProcessor;
+import fr.inria.inspectorguidget.api.processor.InspectorGuidgetProcessor;
+import fr.inria.inspectorguidget.api.processor.WidgetProcessor;
 import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.BeforeClass;

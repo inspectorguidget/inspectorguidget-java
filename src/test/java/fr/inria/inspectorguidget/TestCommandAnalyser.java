@@ -1,11 +1,11 @@
 package fr.inria.inspectorguidget;
 
-import fr.inria.inspectorguidget.analyser.Command;
-import fr.inria.inspectorguidget.analyser.CommandAnalyser;
-import fr.inria.inspectorguidget.analyser.InspectorGuidetAnalyser;
-import fr.inria.inspectorguidget.analyser.UIListener;
-import fr.inria.inspectorguidget.helper.CodeBlockPos;
-import fr.inria.inspectorguidget.helper.SpoonStructurePrinter;
+import fr.inria.inspectorguidget.api.analyser.Command;
+import fr.inria.inspectorguidget.api.analyser.CommandAnalyser;
+import fr.inria.inspectorguidget.api.analyser.InspectorGuidetAnalyser;
+import fr.inria.inspectorguidget.api.analyser.UIListener;
+import fr.inria.inspectorguidget.internal.helper.CodeBlockPos;
+import fr.inria.inspectorguidget.internal.helper.SpoonStructurePrinter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;

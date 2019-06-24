@@ -1,12 +1,12 @@
 package fr.inria.inspectorguidget;
 
-import fr.inria.inspectorguidget.analyser.Command;
-import fr.inria.inspectorguidget.analyser.CommandAnalyser;
-import fr.inria.inspectorguidget.analyser.CommandWidgetBugsDetector;
-import fr.inria.inspectorguidget.analyser.CommandWidgetFinder;
-import fr.inria.inspectorguidget.helper.SpoonStructurePrinter;
-import fr.inria.inspectorguidget.processor.InspectorGuidgetProcessor;
-import fr.inria.inspectorguidget.processor.WidgetProcessor;
+import fr.inria.inspectorguidget.api.Launcher;
+import fr.inria.inspectorguidget.api.analyser.Command;
+import fr.inria.inspectorguidget.api.analyser.CommandAnalyser;
+import fr.inria.inspectorguidget.api.analyser.CommandWidgetFinder;
+import fr.inria.inspectorguidget.internal.helper.SpoonStructurePrinter;
+import fr.inria.inspectorguidget.api.processor.InspectorGuidgetProcessor;
+import fr.inria.inspectorguidget.api.processor.WidgetProcessor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -143,9 +143,6 @@ public class TestWidgetFinder {
 	@Test
 	public void testClassListenerInheritance() {
 		initTest("src/test/resources/java/widgetsIdentification/ClassListenerInheritance.java");
-		final CommandWidgetBugsDetector detector = new CommandWidgetBugsDetector(results);
-		detector.process();
-
 		assertEquals(2, results.size());
 
 		final List<Map.Entry<Command, CommandWidgetFinder.WidgetFinderEntry>> entries = results.entrySet().stream().sorted((a, b) ->
