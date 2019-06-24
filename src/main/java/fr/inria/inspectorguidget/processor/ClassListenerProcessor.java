@@ -2,7 +2,6 @@ package fr.inria.inspectorguidget.processor;
 
 import fr.inria.inspectorguidget.helper.SpoonHelper;
 import fr.inria.inspectorguidget.helper.WidgetHelper;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -14,7 +13,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import org.jetbrains.annotations.NotNull;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
-import spoon.reflect.factory.ClassFactory;
 import spoon.reflect.reference.CtTypeReference;
 
 /**
@@ -85,12 +83,6 @@ public class ClassListenerProcessor extends InspectorGuidgetProcessor<CtClass<?>
 	@Override
 	public boolean isToBeProcessed(final @NotNull CtClass<?> candidate) {
 		return WidgetHelper.INSTANCE.isListenerClass(candidate, getFactory(), null);
-	}
-
-
-	private CtTypeReference<?>[] getTypeRefFromClasses(final @NotNull Class<?>[] classes) {
-		final ClassFactory facto = getFactory().Class();
-		return Arrays.stream(classes).map(type -> facto.createReference(type)).toArray(CtTypeReference<?>[]::new);
 	}
 
 

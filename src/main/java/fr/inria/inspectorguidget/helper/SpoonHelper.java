@@ -24,7 +24,6 @@ import spoon.reflect.code.CtCase;
 import spoon.reflect.code.CtCatch;
 import spoon.reflect.code.CtDo;
 import spoon.reflect.code.CtExpression;
-import spoon.reflect.code.CtFieldRead;
 import spoon.reflect.code.CtFieldWrite;
 import spoon.reflect.code.CtFor;
 import spoon.reflect.code.CtIf;
@@ -50,7 +49,6 @@ import spoon.reflect.declaration.CtPackage;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.declaration.CtVariable;
 import spoon.reflect.declaration.ParentNotInitializedException;
-import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtLocalVariableReference;
 import spoon.reflect.reference.CtTypeReference;
 
@@ -63,12 +61,6 @@ public final class SpoonHelper {
 	private SpoonHelper() {
 		super();
 		logNames = new HashSet<>(Arrays.asList("log", "debug", "warning", "error", "severe", "fine", "finest", "finer", "info", "message"));
-	}
-
-	public <T> CtFieldRead<T> createField(final @NotNull Factory fac, final @NotNull CtVariable<T> var) {
-		final CtFieldRead<T> fieldRead = fac.Core().createFieldRead();
-		fieldRead.setVariable(var.getReference());
-		return fieldRead;
 	}
 
 	public <T> Optional<CtCase<? super  T>> getNonEmptySwitchCase(final @Nullable CtCase<? super  T> ctcase) {
@@ -151,12 +143,6 @@ public final class SpoonHelper {
 	}
 
 
-	public @Nullable CtType<?> getMainTypeFromElt(final @Nullable CtElement elt) {
-		if(elt == null) return null;
-		return getMainType(elt.getParent(CtType.class));
-	}
-
-
 	public @Nullable CtType<?> getMainType(final @Nullable CtType<?> type) {
 		if(type == null) return null;
 		final CtType<?> ty = getMainType(type.getParent(CtType.class));
@@ -178,11 +164,6 @@ public final class SpoonHelper {
 
 		return iff.getThenStatement() == null || iff.getThenStatement().getElements(filter).isEmpty() &&
 			(iff.getElseStatement() == null || iff.getElseStatement().getElements(filter).isEmpty());
-	}
-
-
-	public boolean isEmptySwitch(final @Nullable CtSwitch<?> sw, final @NotNull CtExecutable<?> exec) {
-		return sw != null && sw.getCases().stream().noneMatch(caz -> hasRelevantCommandStatements(caz.getStatements(), exec));
 	}
 
 
@@ -374,29 +355,6 @@ public final class SpoonHelper {
 		exp.setRightHandOperand(caze.getCaseExpression().clone());
 
 		return exp;
-	}
-
-
-	/**
-	 * Searches for the parent or current statement. If elt is a statement, elt is returned.
-	 * Otherwise, a statement is searched in the parent hierarchy.
-	 * @param elt The element to analyse.
-	 * @return The parent statement or elt or nothing.
-	 */
-	public Optional<CtStatement> getStatement(final @Nullable CtElement elt) {
-		if(elt==null) {
-			return Optional.empty();
-		}
-
-		if(elt instanceof CtStatement) {
-			return Optional.of((CtStatement)elt);
-		}
-
-		if(elt.isParentInitialized()) {
-			return getStatement(elt.getParent());
-		}
-
-		return Optional.empty();
 	}
 
 

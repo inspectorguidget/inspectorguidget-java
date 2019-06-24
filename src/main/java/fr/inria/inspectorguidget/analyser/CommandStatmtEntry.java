@@ -53,10 +53,6 @@ public class CommandStatmtEntry {
 		statmts.addAll(listStatmts);
 	}
 
-	public void addStatementAt(final @NotNull CtElement statmt, final int position) {
-		statmts.add(position, statmt);
-	}
-
 	public boolean isMainEntry() {
 		return mainEntry;
 	}

@@ -198,7 +198,7 @@ public class WidgetProcessor extends InspectorGuidgetProcessor<CtTypeReference<?
 			return;
 		}
 		if(parent instanceof CtFieldReference<?>) {
-			CtField<?> decl = ((CtFieldReference<?>) parent).getDeclaration();
+			final CtField<?> decl = ((CtFieldReference<?>) parent).getDeclaration();
 
 			if(decl!=null && WidgetHelper.INSTANCE.isTypeRefAWidget(decl.getType())) {
 				onWidgetVar(decl);

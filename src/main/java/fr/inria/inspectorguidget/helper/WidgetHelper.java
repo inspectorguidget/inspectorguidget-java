@@ -175,12 +175,12 @@ public final class WidgetHelper {
 	 * @param exec The executable to search in the interfaces.
 	 * @return The found interface or nothing. Cannot be null.
 	 */
-	public @NotNull Optional<CtType<?>> getListenerInterface(@Nullable CtExecutable<?> exec) {
+	public @NotNull Optional<CtType<?>> getListenerInterface(@Nullable final CtExecutable<?> exec) {
 		if(exec == null) {
 			return Optional.empty();
 		}
 
-		CtExecutable<?> listenerExec = listenerMethodPrototypes.get(exec.getSignature());
+		final CtExecutable<?> listenerExec = listenerMethodPrototypes.get(exec.getSignature());
 
 		if(listenerExec == null) {
 			return Optional.empty();
@@ -212,7 +212,7 @@ public final class WidgetHelper {
 		try {
 			return type != null && rootEventListenerRef.stream().anyMatch(l -> type.isSubtypeOf(l)) &&
 				!type.isSubtypeOf(getActionRef(factory)) && (ofType == null || type.equals(ofType.getReference()));
-		}catch(SpoonClassNotFoundException ex) {
+		}catch(final SpoonClassNotFoundException ex) {
 			return false;
 		}
 	}

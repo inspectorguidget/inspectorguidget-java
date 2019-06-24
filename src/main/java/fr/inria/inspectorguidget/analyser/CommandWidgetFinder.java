@@ -153,15 +153,16 @@ public class CommandWidgetFinder {
 	private List<StringLitMatch> matchWidgetsUsagesWithStringsInCmdConditions(final @NotNull Command cmd) {
 		final StringLiteralFilter stringLiteralFilter = new StringLiteralFilter();
 
-		final Set<CtLiteral<?>> stringliterals = cmd.getConditions().parallelStream().
+		final Set<CtLiteral<?>> stringliterals = cmd.getConditions().parallelStream()
 			// Must ignore the conditions of if statements when in an else block (in this case the effective if statement is a negation of the
 			// real conditions, so they are different)
-				filter(cond -> cond.realStatmt == cond.effectiveStatmt || cond.realStatmt.isParentInitialized() && !(cond.realStatmt.getParent() instanceof CtIf)).
+			.filter(cond -> cond.realStatmt == cond.effectiveStatmt || cond.realStatmt.isParentInitialized() && !(cond.realStatmt.getParent() instanceof CtIf))
 			// Getting the variables used in the conditions
-				map(cond -> cond.effectiveStatmt.getElements(stringLiteralFilter)).flatMap(s -> s.stream()).
+			.map(cond -> cond.effectiveStatmt.getElements(stringLiteralFilter))
+			.flatMap(s -> s.stream())
 			// Keeping those that declaration are not null
 			// Collecting them
-				distinct().collect(Collectors.toCollection(HashSet::new));
+			.collect(Collectors.toCollection(HashSet::new));
 
 		return widgetUsages.stream().map(usage -> {
 			// Getting the code statement that uses the variable
@@ -185,16 +186,16 @@ public class CommandWidgetFinder {
 	private List<VarMatch> matchWidgetsUsagesWithCmdConditions(final @NotNull Command cmd) {
 		final VariableAccessFilter filter = new VariableAccessFilter();
 
-		final Set<CtVariable<?>> vars = cmd.getConditions().parallelStream().
+		final Set<CtVariable<?>> vars = cmd.getConditions().parallelStream()
 			// Must ignore the conditions of if statements when in an else block (in this case the effective if statement is a negation of the
 			// real conditions, so they are different)
-				filter(cond -> cond.isSameCondition() || cond.realStatmt.isParentInitialized() && !(cond.realStatmt.getParent() instanceof CtIf)).
+			.filter(cond -> cond.isSameCondition() || cond.realStatmt.isParentInitialized() && !(cond.realStatmt.getParent() instanceof CtIf))
 			// Getting the variables used in the conditions
-				map(cond -> cond.effectiveStatmt.getElements(filter)).flatMap(s -> s.stream()).
+			.map(cond -> cond.effectiveStatmt.getElements(filter)).flatMap(s -> s.stream())
 			// Keeping those that declaration are not null
-				map(acc -> acc.getVariable().getDeclaration()).filter(var -> var != null).
+			.map(acc -> acc.getVariable().getDeclaration()).filter(var -> var != null)
 			// Collecting them
-				distinct().collect(Collectors.toCollection(HashSet::new));
+			.collect(Collectors.toCollection(HashSet::new));
 
 		return widgetUsages
 			.parallelStream()
