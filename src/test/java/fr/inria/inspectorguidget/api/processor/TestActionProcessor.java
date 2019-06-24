@@ -1,12 +1,10 @@
-package fr.inria.inspectorguidget;
+package fr.inria.inspectorguidget.api.processor;
 
-import fr.inria.inspectorguidget.api.processor.ActionProcessor;
-import fr.inria.inspectorguidget.api.processor.InspectorGuidgetProcessor;
-import org.junit.Test;
-import spoon.reflect.declaration.CtElement;
-
+import fr.inria.inspectorguidget.api.TestInspectorGuidget;
 import java.util.Collections;
 import java.util.List;
+import org.junit.Test;
+import spoon.reflect.declaration.CtElement;
 
 import static org.junit.Assert.assertEquals;
 

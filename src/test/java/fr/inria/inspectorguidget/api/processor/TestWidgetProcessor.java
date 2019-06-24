@@ -1,15 +1,13 @@
-package fr.inria.inspectorguidget;
+package fr.inria.inspectorguidget.api.processor;
 
-import fr.inria.inspectorguidget.api.processor.InspectorGuidgetProcessor;
-import fr.inria.inspectorguidget.api.processor.WidgetProcessor;
+import fr.inria.inspectorguidget.api.TestInspectorGuidget;
 import java.util.ArrayList;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -119,7 +117,7 @@ public class TestWidgetProcessor extends TestInspectorGuidget<WidgetProcessor> {
 		run("src/test/resources/java/widgetsIdentification/ClassListenerExternal2.java");
 		assertEquals(5, wproc.getWidgetUsages().size());
 		assertEquals(0, wproc.getRefWidgets().size());
-		List<WidgetProcessor.WidgetUsage> usages = wproc.getWidgetUsages().stream().filter(u -> u.creation.isPresent()).
+		final List<WidgetProcessor.WidgetUsage> usages = wproc.getWidgetUsages().stream().filter(u -> u.creation.isPresent()).
 			sorted((a, b) -> a.creation.get().getPosition().getLine() < b.creation.get().getPosition().getLine() ? -1 : 1).
 			collect(Collectors.toList());
 		assertEquals(27, usages.get(0).creation.get().getPosition().getLine());
@@ -131,7 +129,7 @@ public class TestWidgetProcessor extends TestInspectorGuidget<WidgetProcessor> {
 	@Test
 	public void testWidgetAsLocalVarAddedToContainerAccesses() {
 		run("src/test/resources/java/widgetsIdentification/ClassListenerExternal2.java");
-		List<WidgetProcessor.WidgetUsage> usages = wproc.getWidgetUsages().stream().filter(u -> u.creation.isPresent()).
+		final List<WidgetProcessor.WidgetUsage> usages = wproc.getWidgetUsages().stream().filter(u -> u.creation.isPresent()).
 			sorted((a, b) -> a.creation.get().getPosition().getLine() < b.creation.get().getPosition().getLine() ? -1 : 1).
 			collect(Collectors.toList());
 		assertEquals(4, usages.get(0).accesses.size());
@@ -143,7 +141,7 @@ public class TestWidgetProcessor extends TestInspectorGuidget<WidgetProcessor> {
 	@Test
 	public void testAnotherExample3CorrectStatementsIndentification() {
 		run("src/test/resources/java/widgetsIdentification/AnotherExample3.java");
-		List<WidgetProcessor.WidgetUsage> usages = wproc.getWidgetUsages().stream().filter(u -> u.creation.isPresent()).
+		final List<WidgetProcessor.WidgetUsage> usages = wproc.getWidgetUsages().stream().filter(u -> u.creation.isPresent()).
 			sorted((a, b) -> a.creation.get().getPosition().getLine() < b.creation.get().getPosition().getLine() ? -1 : 1).
 			collect(Collectors.toList());
 		assertEquals(4, wproc.getWidgetUsages().size());

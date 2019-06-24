@@ -1,4 +1,4 @@
-package fr.inria.inspectorguidget;
+package fr.inria.inspectorguidget.api;
 
 import fr.inria.inspectorguidget.internal.helper.SpoonStructurePrinter;
 import java.io.File;

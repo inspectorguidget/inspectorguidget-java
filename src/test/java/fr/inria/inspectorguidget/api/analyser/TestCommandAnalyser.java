@@ -1,9 +1,6 @@
-package fr.inria.inspectorguidget;
+package fr.inria.inspectorguidget.api.analyser;
 
-import fr.inria.inspectorguidget.api.analyser.Command;
-import fr.inria.inspectorguidget.api.analyser.CommandAnalyser;
-import fr.inria.inspectorguidget.api.analyser.InspectorGuidetAnalyser;
-import fr.inria.inspectorguidget.api.analyser.UIListener;
+import fr.inria.inspectorguidget.api.TestInspectorGuidget;
 import fr.inria.inspectorguidget.internal.helper.CodeBlockPos;
 import fr.inria.inspectorguidget.internal.helper.SpoonStructurePrinter;
 import java.util.ArrayList;
@@ -42,7 +39,7 @@ public class TestCommandAnalyser {
 	@After
 	public void tearsDown() {
 		if(TestInspectorGuidget.SHOW_MODEL) {
-			SpoonStructurePrinter printer = new SpoonStructurePrinter();
+			final SpoonStructurePrinter printer = new SpoonStructurePrinter();
 			printer.scan(Collections.singletonList(analyser.getModelBuilder().getFactory().Package().getRootPackage()));
 		}
 	}

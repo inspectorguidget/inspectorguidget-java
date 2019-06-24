@@ -1,8 +1,6 @@
-package fr.inria.inspectorguidget;
+package fr.inria.inspectorguidget.api.processor;
 
-import fr.inria.inspectorguidget.api.processor.ClassListenerProcessor;
-import fr.inria.inspectorguidget.api.processor.InspectorGuidgetProcessor;
-import fr.inria.inspectorguidget.api.processor.LambdaListenerProcessor;
+import fr.inria.inspectorguidget.api.TestInspectorGuidget;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import spoon.reflect.declaration.CtElement;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class TestListenerProcessor extends TestInspectorGuidget<InspectorGuidgetProcessor<? extends CtElement>> {
@@ -32,14 +31,14 @@ public class TestListenerProcessor extends TestInspectorGuidget<InspectorGuidget
 	@Test
 	public void testActionListenerAsLambda() {
 		run("src/test/resources/java/listeners/ActionListenerLambda.java");
-		assertEquals(1, lambdaProc.getAllListenerLambdas().size());
-		assertEquals(0, classProc.getAllListenerMethods().size());
+		assertThat(lambdaProc.getAllListenerLambdas()).hasSize(1);
+		assertThat(classProc.getAllListenerMethods()).isEmpty();
 	}
 
 	@Test
 	public void testActionListenerAsLambdaInheritance() {
 		run("src/test/resources/java/listeners/ActionListenerLambdaInheritance.java");
-		assertEquals(1, lambdaProc.getAllListenerLambdas().size());
+		assertThat(lambdaProc.getAllListenerLambdas()).hasSize(1);
 	}
 
 	@Test

@@ -1,6 +1,6 @@
-package fr.inria.inspectorguidget;
+package fr.inria.inspectorguidget.api.processor;
 
-import fr.inria.inspectorguidget.api.processor.FXMLAnnotationProcessor;
+import fr.inria.inspectorguidget.api.TestInspectorGuidget;
 import org.junit.Test;
 
 import java.util.Collections;

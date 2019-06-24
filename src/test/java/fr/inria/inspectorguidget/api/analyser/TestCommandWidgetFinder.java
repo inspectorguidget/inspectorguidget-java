@@ -1,9 +1,7 @@
-package fr.inria.inspectorguidget;
+package fr.inria.inspectorguidget.api.analyser;
 
 import fr.inria.inspectorguidget.api.Launcher;
-import fr.inria.inspectorguidget.api.analyser.Command;
-import fr.inria.inspectorguidget.api.analyser.CommandAnalyser;
-import fr.inria.inspectorguidget.api.analyser.CommandWidgetFinder;
+import fr.inria.inspectorguidget.api.TestInspectorGuidget;
 import fr.inria.inspectorguidget.internal.helper.SpoonStructurePrinter;
 import fr.inria.inspectorguidget.api.processor.InspectorGuidgetProcessor;
 import fr.inria.inspectorguidget.api.processor.WidgetProcessor;
@@ -25,7 +23,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class TestWidgetFinder {
+public class TestCommandWidgetFinder {
 	private CommandAnalyser cmdAnalyser;
 	private WidgetProcessor widgetProc;
 	private CommandWidgetFinder finder;
