@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-import org.junit.Before;
+
+import org.junit.jupiter.api.BeforeEach;
 import spoon.processing.Processor;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.FactoryImpl;
@@ -17,7 +18,8 @@ import spoon.support.DefaultCoreFactory;
 import spoon.support.StandardEnvironment;
 import spoon.support.compiler.jdt.JDTBasedSpoonCompiler;
 
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.AssertionsForClassTypes.fail;
+
 
 public abstract class TestInspectorGuidget<T extends Processor<? extends CtElement>> {
 	protected static final String SWT_LIB = System.getProperty("user.home") +  "/.m2/repository/org/eclipse/swt/org.eclipse.swt.gtk.linux.x86/4.6.1/org.eclipse.swt.gtk.linux.x86-4.6.1.jar";
@@ -43,7 +45,7 @@ public abstract class TestInspectorGuidget<T extends Processor<? extends CtEleme
 		}
 	};
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		final StandardEnvironment evt = new StandardEnvironment();
 		evt.setComplianceLevel(8);

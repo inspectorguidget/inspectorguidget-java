@@ -1,12 +1,14 @@
 package fr.inria.inspectorguidget.api.processor;
 
 import fr.inria.inspectorguidget.api.TestInspectorGuidget;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 
 public class TestFXMLAnnotationProcessor extends TestInspectorGuidget<FXMLAnnotationProcessor> {
 	private FXMLAnnotationProcessor proc;
@@ -20,7 +22,7 @@ public class TestFXMLAnnotationProcessor extends TestInspectorGuidget<FXMLAnnota
 	@Test
 	public void testFXMLAnnotationAttributes() {
 		run("src/test/resources/java/fxml/FXMLAnnotationAttributes.java");
-		assertEquals(2, proc.getFieldAnnotations().size());
-		assertEquals(0, proc.getMethodAnnotations().size());
+		assertThat(proc.getFieldAnnotations().size()).isEqualTo(2);
+		assertThat(proc.getMethodAnnotations().size()).isEqualTo(0);
 	}
 }

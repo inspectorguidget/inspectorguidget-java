@@ -4,18 +4,17 @@ import fr.inria.inspectorguidget.api.TestInspectorGuidget;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import spoon.reflect.declaration.CtElement;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 
 public class TestListenerProcessor extends TestInspectorGuidget<InspectorGuidgetProcessor<? extends CtElement>> {
 	private LambdaListenerProcessor lambdaProc;
 	private ClassListenerProcessor classProc;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpBeforeClass() {
 		InspectorGuidgetProcessor.LOG.addHandler(HANDLER_FAIL);
 	}
@@ -44,133 +43,133 @@ public class TestListenerProcessor extends TestInspectorGuidget<InspectorGuidget
 	@Test
 	public void testActionListenerAsLambdaInheritanceDefaultMethod() {
 		run("src/test/resources/java/listeners/ListenerLambdaInheritanceDefault.java");
-		assertEquals(1, lambdaProc.getAllListenerLambdas().size());
+		assertThat(lambdaProc.getAllListenerLambdas().size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testSwingCaretListenerAsLambda() {
 		run("src/test/resources/java/listeners/CaretListenerLambda.java");
-		assertEquals(1, lambdaProc.getAllListenerLambdas().size());
+		assertThat(lambdaProc.getAllListenerLambdas().size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testJFXHandlerAsClass() {
 		run("src/test/resources/java/listeners/JFXEventHandlerClass.java");
-		assertEquals(1, classProc.getAllListenerMethods().size());
-		assertEquals(1, classProc.getAllListenerMethods().keySet().size());
-		assertEquals(1, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().keySet().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(1);
 	}
 
 	@Test
 	public void testJFXEventHandlerAsLambda() {
 		run("src/test/resources/java/listeners/JFXEventHandlerLambda.java");
-		assertEquals(1, lambdaProc.getAllListenerLambdas().size());
+		assertThat(lambdaProc.getAllListenerLambdas().size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testAWTMouseListernerAsClassImplementingInterface() {
 		run("src/test/resources/java/listeners/MouseListClass.java");
-		assertEquals(1, classProc.getAllListenerMethods().size());
-		assertEquals(1, classProc.getAllListenerMethods().keySet().size());
-		assertEquals(5, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().keySet().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(5);
 	}
 
 
 	@Test
 	public void testSwingMouseInputListernerAsClassImplementingInterface() {
 		run("src/test/resources/java/listeners/MouseInputListClass.java");
-		assertEquals(1, classProc.getAllListenerMethods().size());
-		assertEquals(1, classProc.getAllListenerMethods().keySet().size());
-		assertEquals(7, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().keySet().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(7);
 	}
 
 	@Test
 	public void testSwingMouseListernerAsAnonClass() {
 		run("src/test/resources/java/listeners/MouseListAnonClass.java");
-		assertEquals(1, classProc.getAllListenerMethods().size());
-		assertEquals(1, classProc.getAllListenerMethods().keySet().size());
-		assertEquals(5, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().keySet().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(5);
 	}
 
 	@Test
 	public void testSwingMouseListernerAsClassWithInheritance() {
 		run("src/test/resources/java/listeners/MouseListAnonClassWithInheritance.java");
-		assertEquals(2, classProc.getAllListenerMethods().size());
-		assertEquals(2, classProc.getAllListenerMethods().keySet().size());
-		assertEquals(6, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(2);
+		assertThat(classProc.getAllListenerMethods().keySet().size()).isEqualTo(2);
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(6);
 	}
 
 	@Test
 	public void testSwingMouseListernerAsAnonClassWithInheritance() {
 		run("src/test/resources/java/listeners/MouseListClassInheritance.java");
-		assertEquals(2, classProc.getAllListenerMethods().size());
-		assertEquals(2, classProc.getAllListenerMethods().keySet().size());
-		assertEquals(6, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(2);
+		assertThat(classProc.getAllListenerMethods().keySet().size()).isEqualTo(2);
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(6);
 	}
 
 	@Test
 	public void testSwingMouseListernerTwoSameClasses() {
 		run("src/test/resources/java/listeners/MouseListTwoSameClasses.java");
-		assertEquals(2, classProc.getAllListenerMethods().size());
-		assertEquals(2, classProc.getAllListenerMethods().keySet().size());
-		assertEquals(10, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(2);
+		assertThat(classProc.getAllListenerMethods().keySet().size()).isEqualTo(2);
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(10);
 	}
 
 	@Test
 	public void testActionListenerClassEmpty() {
 		run("src/test/resources/java/analysers/ActionListenerEmptyClass.java");
-		assertEquals(1, classProc.getAllListenerMethods().size());
-		assertEquals(1, classProc.getAllListenerMethods().keySet().size());
-		assertEquals(1, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().keySet().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(1);
 	}
 
 	@Test
 	public void testMouseListClassInheritanceAbsract() {
 		run("src/test/resources/java/listeners/MouseListClassInheritanceAbsract.java");
-		assertEquals(2, classProc.getAllListenerMethods().size());
-		assertEquals(5, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(2);
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(5);
 	}
 
 	@Test
 	public void testAbstractActionNotAListener() {
 		run("src/test/resources/java/listeners/AbstractAction.java");
-		assertEquals(0, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
-		assertEquals(0, classProc.getAllListenerMethods().size());
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(0);
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(0);
 	}
 
 	@Test
 	public void testAWTDragListener() {
 		run("src/test/resources/java/listeners/AWTDragListener.java");
-		assertEquals(4, classProc.getAllListenerMethods().size());
-		assertEquals(12, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(4);
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(12);
 	}
 
 	@Test
 	public void testClassWithMultipleListeners() {
 		run("src/test/resources/java/listeners/MultipleListener.java");
-		assertEquals(1, classProc.getAllListenerMethods().size());
-		assertEquals(2L, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(2L);
 	}
 
 	@Test
 	public void testSWTEventHandlerClass() {
 		runWithCP(Collections.singletonList(SWT_LIB), "src/test/resources/java/listeners/SWTEventHandlerClass.java");
-		assertEquals(1, classProc.getAllListenerMethods().size());
-		assertEquals(1L, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(1L);
 	}
 
 	@Test
 	public void testSWTEventHandlerLambda() {
 		runWithCP(Collections.singletonList(SWT_LIB), "src/test/resources/java/listeners/SWTEventHandlerLambda.java");
-		assertEquals(1, lambdaProc.getAllListenerLambdas().size());
-		assertEquals(0, classProc.getAllListenerMethods().size());
+		assertThat(lambdaProc.getAllListenerLambdas().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(0);
 	}
 
 
 	@Test
 	public void testSWTAdapterClass() {
 		runWithCP(Collections.singletonList(SWT_LIB), "src/test/resources/java/listeners/SWTAdapterClass.java");
-		assertEquals(1, classProc.getAllListenerMethods().size());
-		assertEquals(1L, classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum());
+		assertThat(classProc.getAllListenerMethods().size()).isEqualTo(1);
+		assertThat(classProc.getAllListenerMethods().values().stream().mapToLong(c -> c.size()).sum()).isEqualTo(1L);
 	}
 }

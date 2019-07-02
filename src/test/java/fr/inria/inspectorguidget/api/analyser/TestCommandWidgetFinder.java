@@ -5,6 +5,8 @@ import fr.inria.inspectorguidget.api.TestInspectorGuidget;
 import fr.inria.inspectorguidget.internal.helper.SpoonStructurePrinter;
 import fr.inria.inspectorguidget.api.processor.InspectorGuidgetProcessor;
 import fr.inria.inspectorguidget.api.processor.WidgetProcessor;
+import org.junit.jupiter.api.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,15 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class TestCommandWidgetFinder {
 	private CommandAnalyser cmdAnalyser;
@@ -29,18 +24,18 @@ public class TestCommandWidgetFinder {
 	private CommandWidgetFinder finder;
 	Map<Command, CommandWidgetFinder.WidgetFinderEntry> results;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpBeforeClass() {
 		InspectorGuidgetProcessor.LOG.addHandler(TestInspectorGuidget.HANDLER_FAIL);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		cmdAnalyser = new CommandAnalyser();
 		widgetProc = new WidgetProcessor(true);
 	}
 
-	@After
+	@AfterEach
 	public void tearsDown() {
 		if(TestInspectorGuidget.SHOW_MODEL) {
 			final SpoonStructurePrinter printer = new SpoonStructurePrinter();
@@ -65,236 +60,236 @@ public class TestCommandWidgetFinder {
 	@Test
 	public void testAnonClassOnSingleFieldWidgetNoCond() {
 		initTest("src/test/resources/java/widgetsIdentification/AnonClassOnSingleFieldWidgetNoCond.java");
-		assertEquals(1, results.size());
-		Assert.assertEquals("b", new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName());
+		assertThat( results.size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName()).isEqualTo("b");
 	}
 
 	@Test
 	public void testLambdaOnSingleFieldWidgetNoCond() {
 		initTest("src/test/resources/java/widgetsIdentification/LambdaOnSingleFieldWidgetNoCond.java");
-		assertEquals(1, results.size());
-		assertEquals(1L, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		Assert.assertEquals("b", new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName());
+		assertThat(results.size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1L);
+		assertThat(new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName()).isEqualTo("b");
 	}
 
 	@Test
 	public void testAnonClassOnSingleLocalVarWidgetNoCond() {
 		initTest("src/test/resources/java/widgetsIdentification/AnonClassOnSingleLocalVarWidgetNoCond.java");
-		assertEquals(1, results.size());
-		assertEquals(1L, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		Assert.assertEquals("b", new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName());
+		assertThat(results.size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1L);;
+		assertThat(new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName()).isEqualTo("b");
 	}
 
 	@Test
 	public void testAnonClassOnSingleFieldWidgetEqualCond() {
 		initTest("src/test/resources/java/widgetsIdentification/AnonClassOnFieldWidgetsEqualCond.java");
-		assertEquals(1, results.size());
-		assertEquals(2, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		Assert.assertEquals("b", new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName());
-		Assert.assertEquals("a", new ArrayList<>(results.values()).get(0).getWidgetsUsedInConditions().iterator().next().widgetVar.getSimpleName());
+		assertThat(results.size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(2);
+		assertThat(new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName()).isEqualTo("b");
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetsUsedInConditions().iterator().next().widgetVar.getSimpleName()).isEqualTo("a");
 	}
 
 	@Test
 	public void testLambdaOnSingleFieldWidgetEqualCond() {
 		initTest("src/test/resources/java/widgetsIdentification/LambdaOnFieldWidgetsEqualCond.java");
-		assertEquals(1, results.size());
+		assertThat(results.size()).isEqualTo(1);
 		final Set<WidgetProcessor.WidgetUsage> res = new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values());
 		System.out.println(res);
-		assertEquals(2, res.size());
-		Assert.assertEquals("b", new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName());
-		Assert.assertEquals("a", new ArrayList<>(results.values()).get(0).getWidgetsUsedInConditions().iterator().next().widgetVar.getSimpleName());
+		assertThat(res.size()).isEqualTo(2);
+		assertThat(new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName()).isEqualTo("b");
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetsUsedInConditions().iterator().next().widgetVar.getSimpleName()).isEqualTo("a");
 	}
 
 	@Test
 	public void testClassSingleWidgetNoCond() {
 		initTest("src/test/resources/java/widgetsIdentification/ClassSingleWidgetNoCond.java");
-		assertEquals(1, results.size());
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		Assert.assertEquals("fooo", new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName());
+		assertThat(results.size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName()).isEqualTo("fooo");;
 	}
 
 	@Test
 	public void testClassInheritanceSingleWidgetNoCond() {
 		initTest("src/test/resources/java/widgetsIdentification/ClassInheritanceSingleWidgetNoCond.java");
-		assertEquals(1, results.size());
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		Assert.assertEquals("fooo", new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName());
+		assertThat(results.size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName()).isEqualTo("fooo");
 	}
 
 	@Test
 	public void testWidgetClassListener() {
 		initTest("src/test/resources/java/widgetsIdentification/WidgetClassListener.java");
-		assertEquals(1, results.size());
-		assertEquals(0, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		assertTrue(new ArrayList<>(results.values()).get(0).getWidgetClasses().isPresent());
-		assertEquals("Foo", new ArrayList<>(results.values()).get(0).getWidgetClasses().get().getSimpleName());
+		assertThat(results.size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(0);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetClasses().isPresent()).isTrue();
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetClasses().get().getSimpleName()).isEqualTo("Foo");
 	}
 
 	@Test
 	public void testFalseNegativeWidgetClassListener() {
 		initTest("src/test/resources/java/widgetsIdentification/FalsePositiveThisListener.java");
-		assertEquals(1, results.size());
-		assertEquals(0, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
+		assertThat(results.size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(0);
 	}
 
 
 	@Test
 	public void testClassListenerInheritance() {
 		initTest("src/test/resources/java/widgetsIdentification/ClassListenerInheritance.java");
-		assertEquals(2, results.size());
+		assertThat(results.size()).isEqualTo(2);;
 
 		final List<Map.Entry<Command, CommandWidgetFinder.WidgetFinderEntry>> entries = results.entrySet().stream().sorted((a, b) ->
 			a.getKey().getExecutable().getPosition().getLine() < b.getKey().getExecutable().getPosition().getLine() ? -1 :
 			a.getKey().getExecutable().getPosition().getLine() == b.getKey().getExecutable().getPosition().getLine() ? 0 : 1)
 			.collect(Collectors.toList());
 
-		assertEquals(1, entries.get(0).getValue().getWidgetUsages(results.values()).size());
-		Assert.assertEquals("fooo", entries.get(0).getValue().getWidgetUsages(results.values()).iterator().next().widgetVar.getSimpleName());
+		assertThat(entries.get(0).getValue().getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(entries.get(0).getValue().getWidgetUsages(results.values()).iterator().next().widgetVar.getSimpleName()).isEqualTo("fooo");
 
-		assertEquals(1, entries.get(1).getValue().getWidgetUsages(results.values()).size());
-		Assert.assertEquals("bar", entries.get(1).getValue().getWidgetUsages(results.values()).iterator().next().widgetVar.getSimpleName());
+		assertThat(entries.get(1).getValue().getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(entries.get(1).getValue().getWidgetUsages(results.values()).iterator().next().widgetVar.getSimpleName()).isEqualTo("bar");
 	}
 
 
 	@Test
 	public void testClassListenerExternal() {
 		initTest("src/test/resources/java/widgetsIdentification/ClassListenerExternal.java");
-		assertEquals(2, results.size());
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size());
+		assertThat(results.size()).isEqualTo(2);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testClassListenerExternalString() {
 		initTest("src/test/resources/java/widgetsIdentification/ClassListenerExternalString.java");
-		assertEquals(2, results.size());
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size());
+		assertThat(results.size()).isEqualTo(2);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testClassListenerExternalLocalVar() {
 		initTest("src/test/resources/java/widgetsIdentification/ClassListenerExternalLocalVar.java");
-		assertEquals(2, results.size());
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size());
+		assertThat(results.size()).isEqualTo(2);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testClassListenerExternal2() {
 		initTest("src/test/resources/java/widgetsIdentification/ClassListenerExternal2.java");
-		assertEquals(3, results.size());
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(2).getWidgetUsages(results.values()).size());
+		assertThat(results.size()).isEqualTo(3);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(2).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testMenuWidgetAndListener() {
 		initTest("src/test/resources/java/widgetsIdentification/MenuWidgetAndListener.java");
-		assertEquals(3, results.size());
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(2).getWidgetUsages(results.values()).size());
+		assertThat(results.size()).isEqualTo(3);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(2).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testAnotherExample() {
 		initTest("src/test/resources/java/widgetsIdentification/AnotherExample.java");
-		assertEquals(1, results.size());
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
+		assertThat(results.size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testUseSameStringVar() {
 		initTest("src/test/resources/java/widgetsIdentification/UseSameStringVar.java");
-		assertEquals(1, results.size());
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
+		assertThat(results.size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testAnotherExample2() {
 		initTest("src/test/resources/java/widgetsIdentification/AnotherExample2.java");
-		assertEquals(1, results.size());
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
+		assertThat(results.size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testAnotherExample3() {
 		initTest("src/test/resources/java/widgetsIdentification/AnotherExample3.java");
-		assertEquals(2, results.size());
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
+		assertThat(results.size()).isEqualTo(2);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testAnotherExample3CorrectStatementsIndentification() {
 		initTest("src/test/resources/java/widgetsIdentification/AnotherExample3.java");
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size());
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testListenerRegisterOnInvocation() {
 		initTest("src/test/resources/java/analysers/ListenerRegisterOnInvocation.java");
-		assertEquals(1, results.size());
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
+		assertThat(results.size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testAnotherExample4() {
 		initTest("src/test/resources/java/widgetsIdentification/AnotherExample4.java");
-		assertEquals(2, results.size());
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size());
+		assertThat(results.size()).isEqualTo(2);
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testFilterOutRegistrationWidgetUsingVars() {
 		initTest("src/test/resources/java/widgetsIdentification/FilterOutRegistrationWidgetUsingVars.java");
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testFilterOutRegistrationWidgetUsingLiterals() {
 		initTest("src/test/resources/java/widgetsIdentification/FilterOutRegistrationWidgetUsingLiterals.java");
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testFilterOutRegistrationWidgetUsingWidgetVars() {
 		initTest("src/test/resources/java/widgetsIdentification/FilterOutRegistrationWidgetUsingWidgetVars.java");
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testInsertPSTricksCodeFrame() {
 		initTest("src/test/resources/java/widgetsIdentification/InsertPSTricksCodeFrame.java");
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(2).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(3).getWidgetUsages(results.values()).size());
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(2).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(3).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testAnotherExample5() {
 		initTest("src/test/resources/java/widgetsIdentification/AnotherExample5.java");
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size());
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testWidgetsWithSameName() {
 		initTest("src/test/resources/java/widgetsIdentification/WidgetsWithSameName.java");
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size());
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testNonDeterministActionCmd() {
 		initTest("src/test/resources/java/refactoring/ListenerTab.java");
-		assertEquals(1, new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size());
-		assertEquals(1, new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size());
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(new ArrayList<>(results.values()).get(1).getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
@@ -302,10 +297,10 @@ public class TestCommandWidgetFinder {
 		initTest("src/test/resources/java/refactoring/RefactoringCommandNotPossible.java");
 		final List<Map.Entry<Command, CommandWidgetFinder.WidgetFinderEntry>> entries =
 			results.entrySet().stream().sorted(Comparator.comparing(entry -> entry.getKey().getLineStart())).collect(Collectors.toList());
-		assertEquals(0, entries.get(0).getValue().getWidgetUsages(results.values()).size());
-		assertEquals(0, entries.get(1).getValue().getWidgetUsages(results.values()).size());
-		assertEquals(1, entries.get(2).getValue().getWidgetUsages(results.values()).size());
-		assertEquals(1, entries.get(3).getValue().getWidgetUsages(results.values()).size());
+		assertThat(entries.get(0).getValue().getWidgetUsages(results.values()).size()).isEqualTo(0);
+		assertThat(entries.get(1).getValue().getWidgetUsages(results.values()).size()).isEqualTo(0);
+		assertThat(entries.get(2).getValue().getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(entries.get(3).getValue().getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 
 	@Test
@@ -313,7 +308,7 @@ public class TestCommandWidgetFinder {
 		initTest("src/test/resources/java/refactoring/SuperSwitchActionListener.java");
 		final List<Map.Entry<Command, CommandWidgetFinder.WidgetFinderEntry>> entries =
 			results.entrySet().stream().sorted(Comparator.comparing(entry -> entry.getKey().getLineStart())).collect(Collectors.toList());
-		assertEquals(1, entries.get(0).getValue().getWidgetUsages(results.values()).size());
-		assertEquals(1, entries.get(1).getValue().getWidgetUsages(results.values()).size());
+		assertThat(entries.get(0).getValue().getWidgetUsages(results.values()).size()).isEqualTo(1);
+		assertThat(entries.get(1).getValue().getWidgetUsages(results.values()).size()).isEqualTo(1);
 	}
 }
