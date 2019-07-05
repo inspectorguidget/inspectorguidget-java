@@ -3,6 +3,7 @@ package fr.inria.inspectorguidget.api.processor;
 import fr.inria.inspectorguidget.api.TestInspectorGuidget;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
@@ -117,21 +118,25 @@ public class TestWidgetProcessor extends TestInspectorGuidget<WidgetProcessor> {
 		run("src/test/resources/java/widgetsIdentification/ClassListenerExternal2.java");
 		assertThat(wproc.getWidgetUsages().size()).isEqualTo(5);
 		assertThat(wproc.getRefWidgets().size()).isEqualTo(0);
-		final List<WidgetProcessor.WidgetUsage> usages = wproc.getWidgetUsages().stream().filter(u -> u.creation.isPresent()).
-			sorted((a, b) -> a.creation.get().getPosition().getLine() < b.creation.get().getPosition().getLine() ? -1 : 1).
-			collect(Collectors.toList());
-		assertThat(usages.get(0).creation.get().getPosition().getLine()).isEqualTo(27);
-		assertThat(usages.get(1).creation.get().getPosition().getLine()).isEqualTo(29);
-		assertThat(usages.get(2).creation.get().getPosition().getLine()).isEqualTo(35);
-		assertThat(usages.get(3).creation.get().getPosition().getLine()).isEqualTo(40);
+		final List<WidgetProcessor.WidgetUsage> usages = wproc.getWidgetUsages()
+			.stream()
+			.filter(u -> u.creation.isPresent())
+			.sorted(Comparator.comparingInt(a -> a.creation.orElseThrow().getPosition().getLine()))
+			.collect(Collectors.toList());
+		assertThat(usages.get(0).creation.orElseThrow().getPosition().getLine()).isEqualTo(27);
+		assertThat(usages.get(1).creation.orElseThrow().getPosition().getLine()).isEqualTo(29);
+		assertThat(usages.get(2).creation.orElseThrow().getPosition().getLine()).isEqualTo(35);
+		assertThat(usages.get(3).creation.orElseThrow().getPosition().getLine()).isEqualTo(40);
 	}
 
 	@Test
 	public void testWidgetAsLocalVarAddedToContainerAccesses() {
 		run("src/test/resources/java/widgetsIdentification/ClassListenerExternal2.java");
-		final List<WidgetProcessor.WidgetUsage> usages = wproc.getWidgetUsages().stream().filter(u -> u.creation.isPresent()).
-			sorted((a, b) -> a.creation.get().getPosition().getLine() < b.creation.get().getPosition().getLine() ? -1 : 1).
-			collect(Collectors.toList());
+		final List<WidgetProcessor.WidgetUsage> usages = wproc.getWidgetUsages()
+			.stream()
+			.filter(u -> u.creation.isPresent())
+			.sorted(Comparator.comparingInt(a -> a.creation.orElseThrow().getPosition().getLine()))
+			.collect(Collectors.toList());
 		assertThat(usages.get(0).accesses.size()).isEqualTo(4);
 		assertThat(usages.get(1).accesses.size()).isEqualTo(3);
 		assertThat(usages.get(2).accesses.size()).isEqualTo(3);
@@ -141,9 +146,11 @@ public class TestWidgetProcessor extends TestInspectorGuidget<WidgetProcessor> {
 	@Test
 	public void testAnotherExample3CorrectStatementsIndentification() {
 		run("src/test/resources/java/widgetsIdentification/AnotherExample3.java");
-		final List<WidgetProcessor.WidgetUsage> usages = wproc.getWidgetUsages().stream().filter(u -> u.creation.isPresent()).
-			sorted((a, b) -> a.creation.get().getPosition().getLine() < b.creation.get().getPosition().getLine() ? -1 : 1).
-			collect(Collectors.toList());
+		final List<WidgetProcessor.WidgetUsage> usages = wproc.getWidgetUsages()
+			.stream()
+			.filter(u -> u.creation.isPresent())
+			.sorted(Comparator.comparingInt(a -> a.creation.orElseThrow().getPosition().getLine()))
+			.collect(Collectors.toList());
 		assertThat(wproc.getWidgetUsages().size()).isEqualTo(4);
 		assertThat(wproc.getRefWidgets().size()).isEqualTo(0);
 		assertThat(usages.get(0).accesses.size()).isEqualTo(2);

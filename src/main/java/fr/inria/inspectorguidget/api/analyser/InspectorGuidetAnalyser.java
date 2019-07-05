@@ -22,7 +22,7 @@ import spoon.support.DefaultCoreFactory;
 import spoon.support.StandardEnvironment;
 import spoon.support.compiler.jdt.JDTBasedSpoonCompiler;
 
-public abstract class InspectorGuidetAnalyser implements SpoonAPI {
+public class InspectorGuidetAnalyser implements SpoonAPI {
 	public static final @NotNull Logger LOG = Logger.getLogger("InspectorGuidget analysers");
 
 	static {
