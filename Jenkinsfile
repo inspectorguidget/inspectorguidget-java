@@ -12,6 +12,15 @@ pipeline {
     }
 
     stages {
+
+        stage('Github Pending') {
+            steps{
+                script{
+                    githubStatusCheck("PENDING", "Currently building the project");
+                }
+            }
+        }
+
         stage ('Tools Info') {
             steps {
                 sh '''
