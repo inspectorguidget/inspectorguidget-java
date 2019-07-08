@@ -154,7 +154,7 @@ public class TestCommandAnalyser {
 	public void testClassListenerSwitchHasMainBlock() {
 		analyser.addInputResource("src/test/resources/java/analysers/ActionListenerCondSwitch.java");
 		analyser.run();
-		List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
+		final List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
 		assertThat(cmds.get(0).getMainStatmtEntry().isPresent()).isTrue();
 		assertThat(cmds.get(1).getMainStatmtEntry().isPresent()).isTrue();
 		assertThat(cmds.get(2).getMainStatmtEntry().isPresent()).isTrue();
@@ -193,8 +193,8 @@ public class TestCommandAnalyser {
 		analyser.addInputResource("src/test/resources/java/analysers/ActionListenerCondSimpleNestedIf.java");
 		analyser.run();
 
-		Command cmd = new ArrayList<>(analyser.getCommands().values()).get(0).getCommand(0);
-		List<CodeBlockPos> blocks = cmd.getOptimalCodeBlocks();
+		final Command cmd = new ArrayList<>(analyser.getCommands().values()).get(0).getCommand(0);
+		final List<CodeBlockPos> blocks = cmd.getOptimalCodeBlocks();
 
 		assertThat(blocks.size()).isEqualTo(2);
 		assertThat(blocks.get(0).startLine).isEqualTo(21);
@@ -208,7 +208,7 @@ public class TestCommandAnalyser {
 		analyser.addInputResource("src/test/resources/java/analysers/ActionListenerCondSimpleNestedIf.java");
 		analyser.run();
 
-		Command cmd = new ArrayList<>(analyser.getCommands().values()).get(0).getCommand(0);
+		final Command cmd = new ArrayList<>(analyser.getCommands().values()).get(0).getCommand(0);
 		assertThat(cmd.getNbLines()).isEqualTo(4);
 	}
 
@@ -259,8 +259,8 @@ public class TestCommandAnalyser {
 	public void testRealComplexCommandExample1CommandPositions() {
 		analyser.addInputResource("src/test/resources/java/analysers/RealComplexCommandExample1.java");
 		analyser.run();
-		UIListener list = new ArrayList<>(analyser.getCommands().values()).get(0);
-		List<CodeBlockPos> blocks = list.getCommand(0).getOptimalCodeBlocks();
+		final UIListener list = new ArrayList<>(analyser.getCommands().values()).get(0);
+		final List<CodeBlockPos> blocks = list.getCommand(0).getOptimalCodeBlocks();
 		assertThat(blocks.get(0).startLine).isEqualTo(32);
 		assertThat(blocks.get(0).endLine).isEqualTo(33);
 		assertThat(blocks.get(1).startLine).isEqualTo(35);
@@ -273,8 +273,8 @@ public class TestCommandAnalyser {
 	public void testRealComplexCommandExample1CommandPositions2() {
 		analyser.addInputResource("src/test/resources/java/analysers/RealComplexCommandExample1.java");
 		analyser.run();
-		UIListener list = new ArrayList<>(analyser.getCommands().values()).get(0);
-		List<CodeBlockPos> blocks = list.getCommand(1).getOptimalCodeBlocks();
+		final UIListener list = new ArrayList<>(analyser.getCommands().values()).get(0);
+		final List<CodeBlockPos> blocks = list.getCommand(1).getOptimalCodeBlocks();
 
 		assertThat(blocks.get(0).startLine).isEqualTo(32);
 		assertThat(blocks.get(0).endLine).isEqualTo(33);
@@ -294,8 +294,8 @@ public class TestCommandAnalyser {
 	public void testRealComplexCommandExample1CommandPositions3() {
 		analyser.addInputResource("src/test/resources/java/analysers/RealComplexCommandExample1.java");
 		analyser.run();
-		UIListener cmds = new ArrayList<>(analyser.getCommands().values()).get(0);
-		List<CodeBlockPos> blocks = cmds.getCommand(2).getOptimalCodeBlocks();
+		final UIListener cmds = new ArrayList<>(analyser.getCommands().values()).get(0);
+		final List<CodeBlockPos> blocks = cmds.getCommand(2).getOptimalCodeBlocks();
 
 		assertThat(blocks.get(0).startLine).isEqualTo(32);
 		assertThat(blocks.get(0).endLine).isEqualTo(33);
@@ -313,8 +313,8 @@ public class TestCommandAnalyser {
 	public void testRealComplexCommandExample1CommandPositions4() {
 		analyser.addInputResource("src/test/resources/java/analysers/RealComplexCommandExample1.java");
 		analyser.run();
-		UIListener cmds = new ArrayList<>(analyser.getCommands().values()).get(0);
-		List<CodeBlockPos> blocks = cmds.getCommand(3).getOptimalCodeBlocks();
+		final UIListener cmds = new ArrayList<>(analyser.getCommands().values()).get(0);
+		final List<CodeBlockPos> blocks = cmds.getCommand(3).getOptimalCodeBlocks();
 
 		assertThat(blocks.get(0).startLine).isEqualTo(32);
 		assertThat(blocks.get(0).endLine).isEqualTo(33);
@@ -335,9 +335,9 @@ public class TestCommandAnalyser {
 		analyser.addInputResource("src/test/resources/java/analysers/SimpleDispatch.java");
 		analyser.run();
 		assertThat(analyser.getCommands().values().size()).isEqualTo(1);
-		List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
+		final List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
 		assertThat(cmds.size()).isEqualTo(1L);
-		assertThat(cmds.get(0).getMainStatmtEntry().get().getStatmts().get(0).getPosition().getLine()).isEqualTo(11);
+		assertThat(cmds.get(0).getMainStatmtEntry().orElseThrow().getStatmts().get(0).getPosition().getLine()).isEqualTo(11);
 	}
 
 	@Test
@@ -480,7 +480,7 @@ public class TestCommandAnalyser {
 		analyser.run();
 		assertThat(analyser.getCommands().values().size()).isEqualTo(1);
 		assertThat(analyser.getCommands().values().stream().mapToLong(c -> c.getNbTotalCmds()).sum()).isEqualTo(3L);
-		List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
+		final List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
 		assertThat(cmds.get(0).getMainStatmtEntry().isPresent()).isTrue();
 		assertThat(cmds.get(1).getMainStatmtEntry().isPresent()).isTrue();
 		assertThat(cmds.get(2).getMainStatmtEntry().isPresent()).isTrue();
@@ -500,7 +500,7 @@ public class TestCommandAnalyser {
 		analyser.run();
 		assertThat(analyser.getCommands().values().size()).isEqualTo(2);
 		assertThat(analyser.getCommands().values().stream().mapToLong(c -> c.getNbTotalCmds()).sum()).isEqualTo(2L);
-		List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
+		final List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
 		assertThat(cmds.get(0).getMainStatmtEntry().isPresent()).isTrue();
 		assertThat(cmds.get(1).getMainStatmtEntry().isPresent()).isTrue();
 	}
@@ -511,8 +511,8 @@ public class TestCommandAnalyser {
 		analyser.run();
 		assertThat(analyser.getCommands().values().size()).isEqualTo(1);
 		assertThat(analyser.getCommands().values().stream().mapToLong(c -> c.getNbTotalCmds()).sum()).isEqualTo(1L);
-		Command cmd = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList()).get(0);
-		assertThat(cmd.getMainStatmtEntry().get().getLineStart()).isEqualTo(11);
+		final Command cmd = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList()).get(0);
+		assertThat(cmd.getMainStatmtEntry().orElseThrow().getLineStart()).isEqualTo(11);
 		assertThat(cmd.getMainStatmtEntry().get().getLineEnd()).isEqualTo(11);
 	}
 
@@ -522,8 +522,8 @@ public class TestCommandAnalyser {
 		analyser.run();
 		assertThat(analyser.getCommands().values().size()).isEqualTo(1);
 		assertThat(analyser.getCommands().values().stream().mapToLong(c -> c.getNbTotalCmds()).sum()).isEqualTo(1L);
-		List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
-		assertThat(cmds.get(0).getMainStatmtEntry().get().getStatmts().get(0).getPosition().getLine()).isEqualTo(9);
+		final List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
+		assertThat(cmds.get(0).getMainStatmtEntry().orElseThrow().getStatmts().get(0).getPosition().getLine()).isEqualTo(9);
 	}
 
 	@Test
@@ -604,9 +604,9 @@ public class TestCommandAnalyser {
 		analyser.run();
 		assertThat(analyser.getCommands().values().size()).isEqualTo(1);
 		assertThat(analyser.getCommands().values().stream().mapToLong(c -> c.getNbTotalCmds()).sum()).isEqualTo(1L);
-		List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
-		assertThat(cmds.get(0).getMainStatmtEntry().get().getLineStart()).isEqualTo(13);
-		assertThat(cmds.get(0).getMainStatmtEntry().get().getLineEnd()).isEqualTo(13);
+		final List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
+		assertThat(cmds.get(0).getMainStatmtEntry().orElseThrow().getLineStart()).isEqualTo(13);
+		assertThat(cmds.get(0).getMainStatmtEntry().orElseThrow().getLineEnd()).isEqualTo(13);
 	}
 
 	@Test
@@ -615,9 +615,9 @@ public class TestCommandAnalyser {
 		analyser.run();
 		assertThat(analyser.getCommands().values().size()).isEqualTo(1);
 		assertThat(analyser.getCommands().values().stream().mapToLong(c -> c.getNbTotalCmds()).sum()).isEqualTo(1L);
-		List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
-		assertThat(cmds.get(0).getMainStatmtEntry().get().getLineStart()).isEqualTo(14);
-		assertThat(cmds.get(0).getMainStatmtEntry().get().getLineEnd()).isEqualTo(16);
+		final List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
+		assertThat(cmds.get(0).getMainStatmtEntry().orElseThrow().getLineStart()).isEqualTo(14);
+		assertThat(cmds.get(0).getMainStatmtEntry().orElseThrow().getLineEnd()).isEqualTo(16);
 	}
 
 	@Test
@@ -657,9 +657,9 @@ public class TestCommandAnalyser {
 	public void testComplexConditionalStatementsPosition() {
 		analyser.addInputResource("src/test/resources/java/analysers/ComplexConditionalStatements.java");
 		analyser.run();
-		List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
-		assertThat(cmds.get(1).getMainStatmtEntry().get().getLineStart()).isEqualTo(27);
-		assertThat(cmds.get(1).getMainStatmtEntry().get().getLineEnd()).isEqualTo(30);
+		final List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
+		assertThat(cmds.get(1).getMainStatmtEntry().orElseThrow().getLineStart()).isEqualTo(27);
+		assertThat(cmds.get(1).getMainStatmtEntry().orElseThrow().getLineEnd()).isEqualTo(30);
 	}
 
 	@Test
@@ -698,13 +698,13 @@ public class TestCommandAnalyser {
 	public void testMixedSwitchAndIfStatementsCmdPosition() {
 		analyser.addInputResource("src/test/resources/java/analysers/MixedSwitchAndIf.java");
 		analyser.run();
-		List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).sorted(Comparator.comparing(cmd -> cmd.getLineStart())).collect(Collectors.toList());
-		assertThat(cmds.get(0).getMainStatmtEntry().get().getLineStart()).isEqualTo(19);
-		assertThat(cmds.get(0).getMainStatmtEntry().get().getLineEnd()).isEqualTo(20);
-		assertThat(cmds.get(1).getMainStatmtEntry().get().getLineStart()).isEqualTo(23);
-		assertThat(cmds.get(1).getMainStatmtEntry().get().getLineEnd()).isEqualTo(23);
-		assertThat(cmds.get(2).getMainStatmtEntry().get().getLineStart()).isEqualTo(27);
-		assertThat(cmds.get(2).getMainStatmtEntry().get().getLineEnd()).isEqualTo(28);
+		final List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).sorted(Comparator.comparing(cmd -> cmd.getLineStart())).collect(Collectors.toList());
+		assertThat(cmds.get(0).getMainStatmtEntry().orElseThrow().getLineStart()).isEqualTo(19);
+		assertThat(cmds.get(0).getMainStatmtEntry().orElseThrow().getLineEnd()).isEqualTo(20);
+		assertThat(cmds.get(1).getMainStatmtEntry().orElseThrow().getLineStart()).isEqualTo(23);
+		assertThat(cmds.get(1).getMainStatmtEntry().orElseThrow().getLineEnd()).isEqualTo(23);
+		assertThat(cmds.get(2).getMainStatmtEntry().orElseThrow().getLineStart()).isEqualTo(27);
+		assertThat(cmds.get(2).getMainStatmtEntry().orElseThrow().getLineEnd()).isEqualTo(28);
 	}
 
 
@@ -737,7 +737,7 @@ public class TestCommandAnalyser {
 	public void testSwitchCasesStartLine() {
 		analyser.addInputResource("src/test/resources/java/analysers/SwitchCasesSameLine.java");
 		analyser.run();
-		List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).sorted(Comparator.comparing(cmd -> cmd.getLineStart())).collect(Collectors.toList());
+		final List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).sorted(Comparator.comparing(cmd -> cmd.getLineStart())).collect(Collectors.toList());
 		assertThat(cmds.get(0).getAllLocalStatmtsOrdered().get(0).getPosition().getLine()).isEqualTo(47);
 		assertThat(cmds.get(1).getAllLocalStatmtsOrdered().get(0).getPosition().getLine()).isEqualTo(47);
 		assertThat(cmds.get(2).getAllLocalStatmtsOrdered().get(0).getPosition().getLine()).isEqualTo(47);
@@ -749,7 +749,7 @@ public class TestCommandAnalyser {
 		analyser.addInputResource("src/test/resources/java/analysers/SharedInheritedCommands.java");
 		analyser.run();
 		assertThat(analyser.getCommands().values().size()).isEqualTo(3);
-		List<Map.Entry<CtExecutable<?>, UIListener>> listeners =
+		final List<Map.Entry<CtExecutable<?>, UIListener>> listeners =
 			analyser.getCommands().entrySet().stream().sorted(Comparator.comparing(entry -> entry.getKey().getPosition().getLine())).collect(Collectors.toList());
 		assertThat(listeners.get(0).getValue().getNbTotalCmds()).isEqualTo(1);
 		assertThat(listeners.get(1).getValue().getNbTotalCmds()).isEqualTo(2);
@@ -767,7 +767,7 @@ public class TestCommandAnalyser {
 	public void testSuperSwitchActionListenerGoodStatements() {
 		analyser.addInputResource("src/test/resources/java/refactoring/SuperSwitchActionListener.java");
 		analyser.run();
-		List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
+		final List<Command> cmds = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList());
 		assertThat(cmds.get(0).getAllLocalStatmtsOrdered().size()).isEqualTo(2);
 		assertThat(cmds.get(1).getAllLocalStatmtsOrdered().size()).isEqualTo(2);
 	}
@@ -776,7 +776,7 @@ public class TestCommandAnalyser {
 	public void testBreakAtEnd() {
 		analyser.addInputResource("src/test/resources/java/refactoring/BreakAtEnd.java");
 		analyser.run();
-		Command cmd = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList()).get(0);
+		final Command cmd = analyser.getCommands().values().stream().flatMap(c -> c.getCommands().stream()).collect(Collectors.toList()).get(0);
 		assertThat(cmd.getStatements().size()).isEqualTo(1);
 	}
 

@@ -1,12 +1,9 @@
 package fr.inria.inspectorguidget.api.analyser;
 
-import fr.inria.inspectorguidget.api.Launcher;
 import fr.inria.inspectorguidget.api.TestInspectorGuidget;
-import fr.inria.inspectorguidget.internal.helper.SpoonStructurePrinter;
 import fr.inria.inspectorguidget.api.processor.InspectorGuidgetProcessor;
 import fr.inria.inspectorguidget.api.processor.WidgetProcessor;
-import org.junit.jupiter.api.*;
-
+import fr.inria.inspectorguidget.internal.helper.SpoonStructurePrinter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,6 +12,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -30,7 +32,7 @@ public class TestCommandWidgetFinder {
 	}
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	public void setUp() {
 		cmdAnalyser = new CommandAnalyser();
 		widgetProc = new WidgetProcessor(true);
 	}
@@ -47,7 +49,7 @@ public class TestCommandWidgetFinder {
 		Stream.of(paths).forEach(p -> cmdAnalyser.addInputResource(p));
 		cmdAnalyser.run();
 
-		final Launcher launcher = new Launcher(Collections.singletonList(widgetProc), cmdAnalyser.getModelBuilder());
+		final InspectorGuidetAnalyser launcher = new InspectorGuidetAnalyser(Collections.singletonList(widgetProc), cmdAnalyser.getModelBuilder());
 		launcher.process();
 
 		finder = new CommandWidgetFinder(
@@ -76,7 +78,7 @@ public class TestCommandWidgetFinder {
 	public void testAnonClassOnSingleLocalVarWidgetNoCond() {
 		initTest("src/test/resources/java/widgetsIdentification/AnonClassOnSingleLocalVarWidgetNoCond.java");
 		assertThat(results.size()).isEqualTo(1);
-		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1L);;
+		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1L);
 		assertThat(new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName()).isEqualTo("b");
 	}
 
@@ -105,7 +107,7 @@ public class TestCommandWidgetFinder {
 		initTest("src/test/resources/java/widgetsIdentification/ClassSingleWidgetNoCond.java");
 		assertThat(results.size()).isEqualTo(1);
 		assertThat(new ArrayList<>(results.values()).get(0).getWidgetUsages(results.values()).size()).isEqualTo(1);
-		assertThat(new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName()).isEqualTo("fooo");;
+		assertThat(new ArrayList<>(results.values()).get(0).getRegisteredWidgets().iterator().next().widgetVar.getSimpleName()).isEqualTo("fooo");
 	}
 
 	@Test
@@ -138,9 +140,10 @@ public class TestCommandWidgetFinder {
 		initTest("src/test/resources/java/widgetsIdentification/ClassListenerInheritance.java");
 		assertThat(results.size()).isEqualTo(2);;
 
-		final List<Map.Entry<Command, CommandWidgetFinder.WidgetFinderEntry>> entries = results.entrySet().stream().sorted((a, b) ->
-			a.getKey().getExecutable().getPosition().getLine() < b.getKey().getExecutable().getPosition().getLine() ? -1 :
-			a.getKey().getExecutable().getPosition().getLine() == b.getKey().getExecutable().getPosition().getLine() ? 0 : 1)
+		final List<Map.Entry<Command, CommandWidgetFinder.WidgetFinderEntry>> entries = results
+			.entrySet()
+			.stream()
+			.sorted(Comparator.comparingInt(a -> a.getKey().getExecutable().getPosition().getLine()))
 			.collect(Collectors.toList());
 
 		assertThat(entries.get(0).getValue().getWidgetUsages(results.values()).size()).isEqualTo(1);
